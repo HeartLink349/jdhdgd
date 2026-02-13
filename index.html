@@ -100,7 +100,6 @@
     .tval{ font-size: 22px; font-weight:1000; position:relative; }
     .tlabel{ margin-top: 4px; font-size: 11px; color: rgba(255,255,255,.70); font-weight:900; position:relative; }
 
-    /* مربع الرسالة الجديد */
     .quote-box{
       margin-top: 20px; padding: 18px; border-radius: 22px;
       background: rgba(255,77,166,.08); border: 1px dashed var(--pink);
@@ -118,7 +117,6 @@
     .imgwrap img{ width:100%; height:auto; display:block; }
     .cap{ padding: 12px; font-size: 14px; font-weight:900; text-align:center; }
 
-    /* تنسيق الفيديوهات */
     .video-card{ margin-top: 20px; width: 100%; max-width: 340px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); background: #000; }
     video{ width: 100%; display: block; }
 
@@ -192,7 +190,7 @@
                 </div>
                 <button class="pbtn" id="playBtn"><i class="fa-solid fa-pause"></i></button>
               </div>
-              <audio id="audio" loop src="https://d.top4top.io/m_36963phwn1.mp4"></audio>
+              <audio id="audio" loop src="https://a.top4top.io/m_3696hlo0t1.mp4"></audio>
             </div>
 
             <div class="quote-box">
@@ -239,7 +237,8 @@
 
   <script>
     const PASSWORD = "19/1/2023";
-    const STORY_START = new Date("2023-01-19T00:00:00"); 
+    // تم ضبط التاريخ ليعطي 2 سنة و 3 شهور و 25 يوم في تاريخ 13-2-2026
+    const STORY_START = new Date("2023-10-19T00:00:00"); 
 
     const page1 = document.getElementById("page1");
     const page2 = document.getElementById("page2");
@@ -261,44 +260,26 @@
       }
     });
 
-    // تحكم الفيديو مع الأغنية
     videos.forEach(vid => {
-        vid.addEventListener("play", () => {
-            audio.pause();
-            setPlayIcon(false);
-        });
-        vid.addEventListener("pause", () => {
-            audio.play().catch(()=>{});
-            setPlayIcon(true);
-        });
+        vid.addEventListener("play", () => { audio.pause(); setPlayIcon(false); });
+        vid.addEventListener("pause", () => { audio.play().catch(()=>{}); setPlayIcon(true); });
     });
 
     function setPlayIcon(p){
         playBtn.innerHTML = p ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
     }
-
     playBtn.addEventListener("click", ()=>{
         if(audio.paused) { audio.play(); setPlayIcon(true); }
         else { audio.pause(); setPlayIcon(false); }
     });
 
-    // العداد الزمني
     function tick(){
       const now = new Date();
       let years = now.getFullYear() - STORY_START.getFullYear();
       let months = now.getMonth() - STORY_START.getMonth();
       let days = now.getDate() - STORY_START.getDate();
-
-      if(days < 0){
-        months--;
-        let lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-        days += lastMonth.getDate();
-      }
-      if(months < 0){
-        years--;
-        months += 12;
-      }
-
+      if(days < 0){ months--; let lastMonth = new Date(now.getFullYear(), now.getMonth(), 0); days += lastMonth.getDate(); }
+      if(months < 0){ years--; months += 12; }
       document.getElementById("yy").textContent = years;
       document.getElementById("mm").textContent = months;
       document.getElementById("dd").textContent = days;
@@ -308,7 +289,6 @@
     }
     setInterval(tick, 1000); tick();
 
-    // الرسالة العائمة
     const msgBtn = document.getElementById("msgBtn");
     const overlay = document.getElementById("overlay");
     msgBtn.addEventListener("click", ()=>{
@@ -319,7 +299,6 @@
     });
     document.getElementById("closeOverlay").addEventListener("click", ()=>overlay.classList.remove("show"));
 
-    // الخلفية (القلوب)
     const canvas = document.getElementById("hearts");
     const ctx = canvas.getContext("2d");
     let W, H;
@@ -330,10 +309,7 @@
     function draw(){
         ctx.clearRect(0,0,W,H);
         ctx.fillStyle = "rgba(255,77,166,0.5)";
-        hearts.forEach(h => {
-            h.y += h.v; if(h.y > H) h.y = -20;
-            ctx.beginPath(); ctx.arc(h.x, h.y, h.s/2, 0, Math.PI*2); ctx.fill();
-        });
+        hearts.forEach(h => { h.y += h.v; if(h.y > H) h.y = -20; ctx.beginPath(); ctx.arc(h.x, h.y, h.s/2, 0, Math.PI*2); ctx.fill(); });
         requestAnimationFrame(draw);
     }
     draw();
